@@ -15,9 +15,21 @@ zz = meannonan(xx);
 %zz is a single number (the average of all non-NaN entries in xx). Explain
 %this behavior. 
 
+%Yu Ouyang's answer: for the builtin function mean, it takes the mean in each
+% column, since it is a 5x5 matrix. However, there is a NaN in the second
+% column, so the mean for the second column is NaN.
+% For the function meannonan, I looked up the function file and found that
+% the function first figure out the NaN and infinite numbers in the column,
+% the delete them. And the numbers are no longer in a 5x5 matrix form. They
+% are a single array of numbers. Therefore when taking the mean of the
+% array, it would be a single number instead of 5 mean numbers for each
+% column in the previous matrix. 
+
 % Part 2. Modify the meannonan code so that it behaves as the mean function
 % and produces a row vector where each entry is the average of each column
 % and in the column with a NaN, this NaN is ignored. 
+
+
 
 %% Problem 2. ORFs using functions
 % In this problem we will use functions to simplify and extend our code from HW1, prob 2 
@@ -41,12 +53,24 @@ zz = meannonan(xx);
 % Part4. Write  a final function called plotProbabilityORF.m which takes
 % N_ORF as an argument and makes a plot of the probabily of having an
 % ORF at least this long as a function of the dnasequence length. Decide how the
-% code should determine the lengths of dna sequence to test and implement
+% code should determine the lproengths of dna sequence to test and implement
 % your decision. 
 
 % Part 5. Write code that uses your function from part 4 to make a single
 % plot with separate curves for ORF lengths 100,200,300,and 400. Make sure
 % your plot has appropriate axis labels and legend. 
+
+plotProbabilityORF(100);
+hold on; 
+plotProbabilityORF(200);
+hold on;
+plotProbabilityORF(300);
+hold on;
+plotProbabilityORF(400);
+xlabel('sequence length (b.p.)', 'FontSize', 24);
+ylabel('Probability', 'FontSize', 24);
+legend({'100','200','300','400'},'FontSize', 24);
+set(gca,'FontSize', 16);
 
 %% Problem 3. Codon translation and optimization
 
@@ -61,14 +85,17 @@ zz = meannonan(xx);
 % translation should start from the 1st, 2nd or 3rd base pair (that is,
 % which reading frame to use). Make your code returns an error and
 % appropriate message if frame isn't 1,2, or 3. 
-
+dnaseq = 'CCTTTCCCTTCGTGCCCCCCGGCAGCCTCCAGCGTCGGTCCCCAGGCAGCATGGTGAGGTCTGCTCCCGGACCCTCGCCAC';
+proteinseq = dna2protein(dnaseq,1);
 
 % Part 2. Write code to turn your protein sequence back into DNA sequence.
 % Call your function protein2dna.m
 % Notice that there isn't a unique way to do this. For example, there are 4
 % different codons that correspond to the amino acid Gly. For a first pass,
 % choose one of these codons at random.
-%
+dnaseq = protein2dna(proteinseq)
+
+
 % Part 3. The third column of the codons.csv file contains the frequency of
 % this codon's use in the human proteome in units of number of appearances per
 % thousand codons. Some codons are used more than others. For example,
@@ -83,3 +110,4 @@ zz = meannonan(xx);
 % In other words, for any amino acid, it always uses the codon that appears
 % most frequently in the human proteome. 
 %
+opt_dnaseq = protein2dnaOptimized(proteinseq)
